@@ -1,0 +1,98 @@
+{
+  "project_info": {
+    "project_number": "808813415062",
+    "firebase_url": "https://timetab-ca1c6-default-rtdb.firebaseio.com",
+    "project_id": "timetab-ca1c6",
+    "storage_bucket": "timetab-ca1c6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:808813415062:android:53714c65cebeb0742e10b7",
+        "android_client_info": {
+          "package_name": "com.asdoi.timetable"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "808813415062-8aim6f7tpr26hq8kmon3k9is5u6buqva.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD903WUM6okXW9nYrWCfOz6Cq3r-_G3nSA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "808813415062-8aim6f7tpr26hq8kmon3k9is5u6buqva.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:808813415062:android:487614670b30bd2b2e10b7",
+        "android_client_info": {
+          "package_name": "com.bpitindia.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "808813415062-8aim6f7tpr26hq8kmon3k9is5u6buqva.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD903WUM6okXW9nYrWCfOz6Cq3r-_G3nSA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "808813415062-8aim6f7tpr26hq8kmon3k9is5u6buqva.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:808813415062:android:b4a5e039b8f110bb2e10b7",
+        "android_client_info": {
+          "package_name": "com.bpitindia.timetable"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "808813415062-8aim6f7tpr26hq8kmon3k9is5u6buqva.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD903WUM6okXW9nYrWCfOz6Cq3r-_G3nSA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "808813415062-8aim6f7tpr26hq8kmon3k9is5u6buqva.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
