@@ -6,7 +6,7 @@
         android:icon="@drawable/ic_baseline_notifications_active_24"
         android:key="notification_settings"
         android:title="@string/notification_settings"
-        app:fragment="com.ulan.timetable.fragments.NotificationSettingsFragment" />
+        app:fragment="com.bpitindia.timetable.fragments.NotificationSettingsFragment" />
 
     <Preference
         android:icon="@drawable/ic_access_time_black_24dp"
@@ -35,13 +35,13 @@
         android:key="theme"
         android:title="@string/choose_theme_setting" />
 
-    <EditTextPreference
-        android:icon="@drawable/ic_open_in_browser_white_24dp"
-        android:key="schoolwebsite"
-        android:selectAllOnFocus="true"
-        android:singleLine="true"
-        android:summary="@string/change_school_website_setting_summary"
-        android:title="@string/change_school_website_setting" />
+    <!--    <EditTextPreference-->
+    <!--        android:icon="@drawable/ic_open_in_browser_white_24dp"-->
+    <!--        android:key="schoolwebsite"-->
+    <!--        android:selectAllOnFocus="true"-->
+    <!--        android:singleLine="true"-->
+    <!--        android:summary="@string/change_school_website_setting_summary"-->
+    <!--        android:title="@string/change_school_website_setting" />-->
 
     <SwitchPreferenceCompat
         android:defaultValue="true"
@@ -51,7 +51,8 @@
 
     <Preference
         android:key="preselection_elements"
-        android:title="@string/set_preselection_elements" />
+        android:title="@string/set_preselection_elements"
+        app:isPreferenceVisible="false"/>
 
     <Preference
         android:key="cyanea"

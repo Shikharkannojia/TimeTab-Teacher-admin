@@ -103,13 +103,13 @@ public class WeekUtils {
         int[] preselectedColors = activity.getResources().getIntArray(R.array.preselected_subjects_colors);
         String[] preselectedLanguage = activity.getResources().getStringArray(R.array.preselected_subjects);
 
-        for (int i = 0; i < preselected.length; i++) {
-            if (preselectedValues.contains(preselected[i])) {
-                String langValue = preselectedLanguage[preselectedValues.indexOf(preselected[i])];
-                if (!subjects.contains(langValue.toUpperCase()))
-                    customWeeks.add(0, new Week(langValue, "", "", "", "", preselectedColors[i]));
-            }
-        }
+//        for (int i = 0; i < preselected.length; i++) {
+//            if (preselectedValues.contains(preselected[i])) {
+//                String langValue = preselectedLanguage[preselectedValues.indexOf(preselected[i])];
+//                if (!subjects.contains(langValue.toUpperCase()))
+//                    customWeeks.add(0, new Week(langValue, "", "", "", "", preselectedColors[i]));
+//            }
+//        }
 
         Collections.sort(customWeeks, (week1, week2) -> week1.getSubject().compareToIgnoreCase(week2.getSubject()));
         return customWeeks;
