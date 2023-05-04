@@ -22,7 +22,7 @@
         app:srcCompat="@drawable/ic_add_black_24dp"
         app:maxImageSize="40dp"
         tools:layout_editor_absoluteX="339dp"
-        tools:layout_editor_absoluteY="546dp" />
+        tools:layout_editor_absoluteY="546dp"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/update"

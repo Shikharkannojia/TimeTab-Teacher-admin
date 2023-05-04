@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TimeTab</string>
+    <string name="app_name">TimeTab Admin</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="settings">Settings</string>
@@ -23,7 +23,7 @@
     <string name="edit">Edit</string>
     <string name="school_website">College website</string>
     <string name="please_set_school_website_url">Please set the URL of your college website in settings.</string>
-   <!-- Please set the URL of your college website in settings.-->
+    <!-- Please set the URL of your college website in settings.-->
 
     <string name="add_subject">Add subject</string>
     <string name="edit_subject">Edit subject</string>
@@ -125,7 +125,7 @@
     <string name="exams_activity_title">Exams</string>
     <string name="notification_summary_title">Today\'s lessons:</string>
     <string name="notification_next_week_title">Next lesson</string>
-    <string name="nav_drawer_description">This is a Time Table App</string>
+    <string name="nav_drawer_description">A BPIT Time Table App</string>
     <string name="time_from">from</string>
 
     <string name="channel">Timetable</string>
@@ -188,21 +188,21 @@
     </string-array>
 
     <string-array name="preselected_subjects">
-        <item>Art</item>
-        <item>Biology</item>
-        <item>Chemistry</item>
-        <item>English</item>
-        <item>French</item>
-        <item>Geography</item>
-        <item>German</item>
-        <item>History</item>
-        <item>Math</item>
-        <item>Music</item>
-        <item>Physics</item>
-        <item>Politics</item>
-        <item>Religion</item>
-        <item>Spanish</item>
-        <item>Sport</item>
+        <!--        <item>XYZ</item>-->
+        <!--        <item>Biology</item>-->
+        <!--        <item>Chemistry</item>-->
+        <!--        <item>English</item>-->
+        <!--        <item>French</item>-->
+        <!--        <item>Geography</item>-->
+        <!--        <item>German</item>-->
+        <!--        <item>History</item>-->
+        <!--        <item>Math</item>-->
+        <!--        <item>Music</item>-->
+        <!--        <item>Physics</item>-->
+        <!--        <item>Politics</item>-->
+        <!--        <item>Religion</item>-->
+        <!--        <item>Spanish</item>-->
+        <!--        <item>Sport</item>-->
     </string-array>
 
     <string name="pick_a_subject">Pick a subject</string>

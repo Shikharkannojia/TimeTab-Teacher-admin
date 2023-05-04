@@ -58,28 +58,28 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat {
         });
 
 
-        myPref = findPreference("alarm");
-        Objects.requireNonNull(myPref).setOnPreferenceClickListener((Preference p) -> {
-            int[] oldTimes = PreferenceUtil.getAlarmTime(getContext());
-            TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(),
-                    (view, hourOfDay, minute) -> {
-                        PreferenceUtil.setAlarmTime(requireContext(), hourOfDay, minute, 0);
-                        PreferenceUtil.setRepeatingAlarm(requireContext(), DailyReceiver.class, hourOfDay, minute, 0, DailyReceiver.DailyReceiverID, AlarmManager.INTERVAL_DAY);
-                        p.setSummary(hourOfDay + ":" + minute);
-                    }, oldTimes[0], oldTimes[1], true);
-            timePickerDialog.setTitle(R.string.choose_time);
-            timePickerDialog.show();
-            return true;
-        });
-        int[] oldTimes = PreferenceUtil.getAlarmTime(getContext());
-        myPref.setSummary(oldTimes[0] + ":" + oldTimes[1]);
+//        myPref = findPreference("alarm");
+//        Objects.requireNonNull(myPref).setOnPreferenceClickListener((Preference p) -> {
+//            int[] oldTimes = PreferenceUtil.getAlarmTime(getContext());
+//            TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(),
+//                    (view, hourOfDay, minute) -> {
+//                        PreferenceUtil.setAlarmTime(requireContext(), hourOfDay, minute, 0);
+//                        PreferenceUtil.setRepeatingAlarm(requireContext(), DailyReceiver.class, hourOfDay, minute, 0, DailyReceiver.DailyReceiverID, AlarmManager.INTERVAL_DAY);
+//                        p.setSummary(hourOfDay + ":" + minute);
+//                    }, oldTimes[0], oldTimes[1], true);
+//            timePickerDialog.setTitle(R.string.choose_time);
+//            timePickerDialog.show();
+//            return true;
+//        });
+//        int[] oldTimes = PreferenceUtil.getAlarmTime(getContext());
+//        myPref.setSummary(oldTimes[0] + ":" + oldTimes[1]);
 
     }
 
     private void setNotif() {
         boolean show = PreferenceManager.getDefaultSharedPreferences(requireContext()).getBoolean("timetableNotif", true);
-        findPreference("alwaysNotification").setVisible(show);
-        findPreference("alarm").setVisible(show);
+//        findPreference("alwaysNotification").setVisible(show);
+//        findPreference("alarm").setVisible(show);
         findPreference("reminder").setVisible(show && ProfileManagement.isPreferredProfile());
         findPreference("notification_end").setVisible(show && ProfileManagement.isPreferredProfile());
     }
