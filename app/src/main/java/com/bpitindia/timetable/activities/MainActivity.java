@@ -145,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             m.child("Subject").setValue(subject);
             m.child("Room").setValue(room);
             m.child("Time").setValue(time);
+            m.child("Color").setValue(monday.get(i).getColor());
         }
 
         for(int i = 0; i < tuesday.size(); i++){
@@ -159,6 +160,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             m.child("Subject").setValue(subject);
             m.child("Room").setValue(room);
             m.child("Time").setValue(time);
+            m.child("Color").setValue(tuesday.get(i).getColor());
         }
 
         for(int i = 0; i < wednesday.size(); i++){
@@ -173,6 +175,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             m.child("Subject").setValue(subject);
             m.child("Room").setValue(room);
             m.child("Time").setValue(time);
+            m.child("Color").setValue(wednesday.get(i).getColor());
         }
 
         for(int i = 0; i < thursday.size(); i++){
@@ -187,6 +190,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             m.child("Subject").setValue(subject);
             m.child("Room").setValue(room);
             m.child("Time").setValue(time);
+            m.child("Color").setValue(thursday.get(i).getColor());
         }
 
         for(int i = 0; i < friday.size(); i++){
@@ -201,6 +205,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             m.child("Subject").setValue(subject);
             m.child("Room").setValue(room);
             m.child("Time").setValue(time);
+            m.child("Color").setValue(friday.get(i).getColor());
         }
     }
 
@@ -217,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         initSpinner();
 
         setupWeeksTV();
-        
+
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View headerview = navigationView.getHeaderView(0);
