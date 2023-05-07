@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         ProfileManagement.initProfiles(this);
         progressBar=findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.VISIBLE);
+
         if (Build.VERSION.SDK_INT >= 25) {
             ShortcutUtils.Companion.createShortcuts(this);
         }
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         getFirebase();
         initAll();
-        progressBar.setVisibility(View.GONE);
+
         FloatingActionButton doneButton = findViewById(R.id.update);
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -293,6 +293,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onStart() {
         super.onStart();
+        progressBar.setVisibility(View.VISIBLE);
         DoNotDisturbReceiversKt.setDoNotDisturbReceivers(this, false);
     }
 
@@ -326,6 +327,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         setupFragments();
         setupCustomDialog();
+        progressBar.setVisibility(View.GONE);
     }
 
     private boolean dontfire = true;
@@ -377,7 +379,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void setupWeeksTV() {
         TextView weekView = findViewById(R.id.main_week_tV);
         if (PreferenceUtil.isTwoWeeksEnabled(this)) {
-            weekView.setVisibility(View.VISIBLE);
+           // odd even timetable visibility
+            weekView.setVisibility(View.GONE);
             if (PreferenceUtil.isEvenWeek(this, Calendar.getInstance()))
                 weekView.setText(R.string.even_week);
             else
