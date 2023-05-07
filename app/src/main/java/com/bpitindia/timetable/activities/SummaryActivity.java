@@ -90,10 +90,8 @@ public class SummaryActivity extends AppCompatActivity {
             header = newHeader.toArray(new String[]{});
         }
 
-        if (PreferenceUtil.isSummaryLibrary1(this))
             setupCourseTableLibrary1();
-        else
-            setupTimetableLibrary2();
+//            setupTimetableLibrary2();
     }
 
     @Override

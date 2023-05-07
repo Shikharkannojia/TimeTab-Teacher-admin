@@ -132,7 +132,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private void showPreselectionElements() {
         boolean show = PreferenceUtil.isPreselectionList(requireContext());
-        findPreference("preselection_elements").setVisible(show);
+        findPreference("preselection_elements").setVisible(false);
     }
 
     private static void tintIcons(Preference preference, int color) {

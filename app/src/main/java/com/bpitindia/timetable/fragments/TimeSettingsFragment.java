@@ -59,41 +59,41 @@ public class TimeSettingsFragment extends PreferenceFragmentCompat {
         });
         myPref.setSummary(PreferenceUtil.getPeriodLength(getContext()) + " " + getString(R.string.minutes));
 
-        myPref = findPreference("two_weeks");
-        Objects.requireNonNull(myPref).setOnPreferenceClickListener((p) -> {
-            setTermStartVisibility();
-            return true;
-        });
+//        myPref = findPreference("two_weeks");
+//        Objects.requireNonNull(myPref).setOnPreferenceClickListener((p) -> {
+//            setTermStartVisibility();
+//            return true;
+//        });
 
-        setTermStartVisibility();
-        myPref = findPreference("term_start");
-
-        Calendar calendar = PreferenceUtil.getTermStart(requireContext());
-
-        Objects.requireNonNull(myPref).setTitle(getString(R.string.start_of_term) + " (" + WeekUtils.localizeDate(requireContext(), new Date(calendar.getTimeInMillis())) + ")");
-        myPref.setOnPreferenceClickListener((p) -> {
-            Calendar calendar2 = PreferenceUtil.getTermStart(requireContext());
-            int mYear2 = calendar2.get(Calendar.YEAR);
-            int mMonth2 = calendar2.get(Calendar.MONTH);
-            int mDayofMonth2 = calendar2.get(Calendar.DAY_OF_MONTH);
-
-            DatePickerDialog datePickerDialog = new DatePickerDialog(requireActivity(), (view, year, month, dayOfMonth) -> {
-                PreferenceUtil.setTermStart(requireContext(), year, month, dayOfMonth);
-                Calendar cal = Calendar.getInstance();
-                cal.set(Calendar.YEAR, year);
-                cal.set(Calendar.MONTH, month);
-                cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-
-                p.setTitle(getString(R.string.start_of_term) + " (" + WeekUtils.localizeDate(requireContext(), new Date(cal.getTimeInMillis())) + ")");
-            }, mYear2, mMonth2, mDayofMonth2);
-
-            datePickerDialog.setTitle(R.string.choose_date);
-            datePickerDialog.show();
-            return true;
-        });
+//        setTermStartVisibility();
+//        myPref = findPreference("term_start");
+//
+//        Calendar calendar = PreferenceUtil.getTermStart(requireContext());
+//
+//        Objects.requireNonNull(myPref).setTitle(getString(R.string.start_of_term) + " (" + WeekUtils.localizeDate(requireContext(), new Date(calendar.getTimeInMillis())) + ")");
+//        myPref.setOnPreferenceClickListener((p) -> {
+//            Calendar calendar2 = PreferenceUtil.getTermStart(requireContext());
+//            int mYear2 = calendar2.get(Calendar.YEAR);
+//            int mMonth2 = calendar2.get(Calendar.MONTH);
+//            int mDayofMonth2 = calendar2.get(Calendar.DAY_OF_MONTH);
+//
+//            DatePickerDialog datePickerDialog = new DatePickerDialog(requireActivity(), (view, year, month, dayOfMonth) -> {
+//                PreferenceUtil.setTermStart(requireContext(), year, month, dayOfMonth);
+//                Calendar cal = Calendar.getInstance();
+//                cal.set(Calendar.YEAR, year);
+//                cal.set(Calendar.MONTH, month);
+//                cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+//
+//                p.setTitle(getString(R.string.start_of_term) + " (" + WeekUtils.localizeDate(requireContext(), new Date(cal.getTimeInMillis())) + ")");
+//            }, mYear2, mMonth2, mDayofMonth2);
+//
+//            datePickerDialog.setTitle(R.string.choose_date);
+//            datePickerDialog.show();
+//            return true;
+//        });
     }
 
-    private void setTermStartVisibility() {
-        findPreference("term_start").setVisible(PreferenceUtil.isTwoWeeksEnabled(requireContext()));
-    }
+//    private void setTermStartVisibility() {
+//        findPreference("term_start").setVisible(PreferenceUtil.isTwoWeeksEnabled(requireContext()));
+//    }
 }

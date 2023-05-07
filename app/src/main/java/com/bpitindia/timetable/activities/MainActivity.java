@@ -2,6 +2,7 @@ package com.bpitindia.timetable.activities;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.browser.customtabs.CustomTabsIntent;
@@ -98,8 +100,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                putOnFirebase();
-                Toast.makeText(getApplicationContext(),"Time Table Uploaded To All The Students",Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("Upload Timetable");
+                builder.setMessage("Do you want to upload the new time table to all the students");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        putOnFirebase();
+                        Toast.makeText(getApplicationContext(),"Time Table Uploaded To All The Students",Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Perform action when Cancel is pressed
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
     }
@@ -129,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             m.child("Subject").setValue(subject);
             m.child("Room").setValue(room);
             m.child("Time").setValue(time);
+            m.child("Color").setValue(monday.get(i).getColor());
         }
 
         for(int i = 0; i < tuesday.size(); i++){
@@ -143,6 +160,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             m.child("Subject").setValue(subject);
             m.child("Room").setValue(room);
             m.child("Time").setValue(time);
+            m.child("Color").setValue(tuesday.get(i).getColor());
         }
 
         for(int i = 0; i < wednesday.size(); i++){
@@ -157,6 +175,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             m.child("Subject").setValue(subject);
             m.child("Room").setValue(room);
             m.child("Time").setValue(time);
+            m.child("Color").setValue(wednesday.get(i).getColor());
         }
 
         for(int i = 0; i < thursday.size(); i++){
@@ -171,6 +190,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             m.child("Subject").setValue(subject);
             m.child("Room").setValue(room);
             m.child("Time").setValue(time);
+            m.child("Color").setValue(thursday.get(i).getColor());
         }
 
         for(int i = 0; i < friday.size(); i++){
@@ -185,6 +205,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             m.child("Subject").setValue(subject);
             m.child("Room").setValue(room);
             m.child("Time").setValue(time);
+            m.child("Color").setValue(friday.get(i).getColor());
         }
     }
 
@@ -397,42 +418,44 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             restore();
         } else if (item.getItemId() == R.id.action_remove_all) {
             deleteAll();
-        } else if (item.getItemId() == R.id.action_about_libs) {
-            new LibsBuilder()
-                    .withActivityTitle(getString(R.string.about_libs_title))
-                    .withAboutIconShown(true)
-                    .withFields(R.string.class.getFields())
-                    .withLicenseShown(true)
-                    .withAboutDescription(getString(R.string.nav_drawer_description))
-                    .withAboutAppName(getString(R.string.app_name))
-                    .start(this);
-        } else if (item.getItemId() == R.id.action_profiles) {
-            Intent intent = new Intent(getBaseContext(), ProfileActivity.class);
-            startActivity(intent);
-            finish();
         }
+//        else if (item.getItemId() == R.id.action_about_libs) {
+//            new LibsBuilder()
+//                    .withActivityTitle(getString(R.string.about_libs_title))
+//                    .withAboutIconShown(true)
+//                    .withFields(R.string.class.getFields())
+//                    .withLicenseShown(true)
+//                    .withAboutDescription(getString(R.string.nav_drawer_description))
+//                    .withAboutAppName(getString(R.string.app_name))
+//                    .start(this);
+//        } else if (item.getItemId() == R.id.action_profiles) {
+//            Intent intent = new Intent(getBaseContext(), ProfileActivity.class);
+//            startActivity(intent);
+//            finish();
+//        }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
-        if (itemId == R.id.exams) {
-            Intent exams = new Intent(MainActivity.this, ExamsActivity.class);
-            startActivity(exams);
-        } else if (itemId == R.id.homework) {
-            Intent homework = new Intent(MainActivity.this, HomeworkActivity.class);
-            startActivity(homework);
-        } else if (itemId == R.id.notes) {
-            Intent note = new Intent(MainActivity.this, NotesActivity.class);
-            startActivity(note);
-        } else if (itemId == R.id.settings) {
+//        if (itemId == R.id.exams) {
+//            Intent exams = new Intent(MainActivity.this, ExamsActivity.class);
+//            startActivity(exams);
+//        } else if (itemId == R.id.homework) {
+//            Intent homework = new Intent(MainActivity.this, HomeworkActivity.class);
+//            startActivity(homework);
+//        } else if (itemId == R.id.notes) {
+//            Intent note = new Intent(MainActivity.this, NotesActivity.class);
+//            startActivity(note);
+//        }
+        if (itemId == R.id.settings) {
             Intent settings = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(settings);
             finish();
         } else if (itemId == R.id.schoolwebsitemenu) {
             String schoolWebsite = "https://www.bpitindia.com/";
-                   /* PreferenceManager.getDefaultSharedPreferences(this).getString(SettingsActivity.KEY_SCHOOL_WEBSITE_SETTING, null);*/
+            /* PreferenceManager.getDefaultSharedPreferences(this).getString(SettingsActivity.KEY_SCHOOL_WEBSITE_SETTING, null);*/
 
             if (!TextUtils.isEmpty(schoolWebsite)) {
                 openUrlInChromeCustomTab(schoolWebsite);
@@ -611,7 +634,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             CustomTabsHelper.Companion.openCustomTab(context,
                     customTabsIntent,
                     Uri.parse(url),
-                   new WebViewFallback());
+                    new WebViewFallback());
         } catch (Exception e) {
             e.printStackTrace();
         }
