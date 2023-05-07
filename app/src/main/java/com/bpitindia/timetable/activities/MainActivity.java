@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .show();
         }
 
-        getFirebase();
+
         initAll();
 
         FloatingActionButton doneButton = findViewById(R.id.update);
@@ -295,9 +295,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onStart();
         progressBar.setVisibility(View.VISIBLE);
         DoNotDisturbReceiversKt.setDoNotDisturbReceivers(this, false);
+        getFirebase();
+      //  initAll();
     }
 
     private void initAll() {
+
         NotificationUtil.sendNotificationCurrentLesson(this, false);
         PreferenceUtil.setDoNotDisturb(this, PreferenceUtil.doNotDisturbDontAskAgain(this));
         PreferenceUtil.setOneTimeAlarm(this, MidnightReceiver.class, MidnightReceiver.Companion.getHour(), MidnightReceiver.Companion.getMinutes(), 0, MidnightReceiver.Companion.getMidnightRecieverID());
