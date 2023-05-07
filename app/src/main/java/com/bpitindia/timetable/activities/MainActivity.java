@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,11 +36,16 @@ import androidx.viewpager.widget.ViewPager;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.ajts.androidmads.library.ExcelToSQLite;
 import com.ajts.androidmads.library.SQLiteToExcel;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.pd.chocobar.ChocoBar;
 import com.bpitindia.timetable.adapters.FragmentsTabAdapter;
@@ -59,6 +65,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 import info.isuru.sheriff.enums.SheriffPermission;
 import info.isuru.sheriff.helper.Sheriff;
@@ -71,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private FragmentsTabAdapter adapter;
     private ViewPager viewPager;
-
+    private ProgressBar progressBar;
     private DbHelper db;
 
     private static final int showNextDayAfterSpecificHour = 20;
@@ -83,7 +90,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         ProfileManagement.initProfiles(this);
-
+        progressBar=findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
         if (Build.VERSION.SDK_INT >= 25) {
             ShortcutUtils.Companion.createShortcuts(this);
         }
@@ -95,7 +103,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .show();
         }
 
+        getFirebase();
         initAll();
+        progressBar.setVisibility(View.GONE);
         FloatingActionButton doneButton = findViewById(R.id.update);
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,6 +114,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 builder.setTitle("Upload Timetable");
                 builder.setMessage("Do you want to upload the new time table to all the students");
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
                     public void onClick(DialogInterface dialog, int id) {
                         putOnFirebase();
                         Toast.makeText(getApplicationContext(),"Time Table Uploaded To All The Students",Toast.LENGTH_SHORT).show();
@@ -119,6 +130,76 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
     }
+
+    private void getFirebase() {
+        db = new DbHelper(this);
+        loadDay("Monday");
+        loadDay("Tuesday");
+        loadDay("Wednesday");
+        loadDay("Thursday");
+        loadDay("Friday");
+    }
+
+    public void loadDay(String day){
+        ArrayList<Week> list = new ArrayList<>();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("App");
+        db = new DbHelper(this);
+        db.deleteAll();
+
+        DatabaseReference myRef1 = database.getReference("App").child("TimeTable").child(day);
+        myRef1.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // Get the final size of the list
+                int size1 = (int) snapshot.getChildrenCount();
+                // Do something with the final size
+                // ...
+                for (int i = 1; i <= size1; i++) {
+                    String str = "P" + i;
+
+                    myRef.child("TimeTable").child(day).child(str).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                        @Override
+                        public void onSuccess(DataSnapshot dataSnapshot) {
+                            String name = Objects.requireNonNull(dataSnapshot.child("Subject").getValue()).toString();
+                            String room = Objects.requireNonNull(dataSnapshot.child("Room").getValue()).toString();
+                            String teacher = Objects.requireNonNull(dataSnapshot.child("Teacher").getValue()).toString();
+                            String time = Objects.requireNonNull(dataSnapshot.child("Time").getValue()).toString();
+                            int color = Integer.parseInt(Objects.requireNonNull(dataSnapshot.child("Color").getValue()).toString());
+                            String time1 = "";
+                            String time2 = "";
+                            ///progressBar.setProgress(50);
+                            if (time != null && !time.equals("null")) {
+                                time1 = time.substring(0, 5);
+                                time2 = time.substring(8, time.length());
+                            }
+
+                            Week w1 = new Week(name, teacher, room, time1, time2, color);
+                            w1.setFragment(day);
+                            db.insertWeek(w1);
+                            list.add(w1);
+                            //progressBar.setProgress(75);
+                            // progressBar.setVisibility(View.GONE);
+                            initAll();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            // Handle any errors that may occur
+                        }
+                    });
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle any errors that may occur
+            }
+        });
+    }
+
+
+
+
     public void putOnFirebase(){
         db = new DbHelper(this);
         ArrayList<Week> monday = db.getWeek("Monday");
@@ -315,8 +396,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         WeekdayFragment wednesdayFragment = new WeekdayFragment(WeekdayFragment.KEY_WEDNESDAY_FRAGMENT);
         WeekdayFragment thursdayFragment = new WeekdayFragment(WeekdayFragment.KEY_THURSDAY_FRAGMENT);
         WeekdayFragment fridayFragment = new WeekdayFragment(WeekdayFragment.KEY_FRIDAY_FRAGMENT);
-        WeekdayFragment saturdayFragment = new WeekdayFragment(WeekdayFragment.KEY_SATURDAY_FRAGMENT);
-        WeekdayFragment sundayFragment = new WeekdayFragment(WeekdayFragment.KEY_SUNDAY_FRAGMENT);
+/*        WeekdayFragment saturdayFragment = new WeekdayFragment(WeekdayFragment.KEY_SATURDAY_FRAGMENT);
+        WeekdayFragment sundayFragment = new WeekdayFragment(WeekdayFragment.KEY_SUNDAY_FRAGMENT);*/
 
         boolean startOnSunday = PreferenceUtil.isWeekStartOnSunday(this);
         boolean showWeekend = PreferenceUtil.isSevenDays(this);
@@ -329,11 +410,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             adapter.addFragment(fridayFragment, getResources().getString(R.string.friday));
 
             if (showWeekend) {
-                adapter.addFragment(saturdayFragment, getResources().getString(R.string.saturday));
-                adapter.addFragment(sundayFragment, getResources().getString(R.string.sunday));
+              //  adapter.addFragment(saturdayFragment, getResources().getString(R.string.saturday));
+              //  adapter.addFragment(sundayFragment, getResources().getString(R.string.sunday));
             }
         } else {
-            adapter.addFragment(sundayFragment, getResources().getString(R.string.sunday));
+           // adapter.addFragment(sundayFragment, getResources().getString(R.string.sunday));
             adapter.addFragment(mondayFragment, getResources().getString(R.string.monday));
             adapter.addFragment(tuesdayFragment, getResources().getString(R.string.tuesday));
             adapter.addFragment(wednesdayFragment, getResources().getString(R.string.wednesday));
@@ -341,7 +422,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             if (showWeekend) {
                 adapter.addFragment(fridayFragment, getResources().getString(R.string.friday));
-                adapter.addFragment(saturdayFragment, getResources().getString(R.string.saturday));
+               // adapter.addFragment(saturdayFragment, getResources().getString(R.string.saturday));
             }
         }
 
