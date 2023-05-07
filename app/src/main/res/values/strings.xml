@@ -255,4 +255,5 @@
         \nIn addition, based on this profile data, notifications are sent at the beginning of the lessons and the smartphone is set to \"Do Not Disturb\" mode.</string>
 
     <string name="buy_me_a_coffee" translatable="false">Buy me a coffee</string>
+    <string name="print_timetable">Print TimeTable</string>
 </resources>

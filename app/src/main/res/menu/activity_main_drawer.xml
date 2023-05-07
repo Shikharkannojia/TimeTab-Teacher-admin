@@ -46,11 +46,18 @@
     <group
         android:id="@+id/menu_down"
         android:checkableBehavior="none">
+<!--        <item-->
+<!--            android:id="@+id/buymeacoffee"-->
+<!--            android:icon="@drawable/ic_baseline_coffee_24"-->
+<!--            android:title="@string/buy_me_a_coffee"-->
+<!--            android:visible="false"/>-->
+
         <item
-            android:id="@+id/buymeacoffee"
-            android:icon="@drawable/ic_baseline_coffee_24"
-            android:title="@string/buy_me_a_coffee"
-            android:visible="false"/>
+            android:id="@+id/print_time_table"
+            android:icon="@drawable/ic_assignment_black_24dp"
+            android:title="@string/print_timetable"/>
+
+
         <item
             android:id="@+id/settings"
             android:icon="@drawable/ic_settings_black_24dp"

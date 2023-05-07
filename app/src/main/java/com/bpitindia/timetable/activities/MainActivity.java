@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,6 +37,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.ajts.androidmads.library.ExcelToSQLite;
 import com.ajts.androidmads.library.SQLiteToExcel;
+import com.bpitindia.timetable.model.DownloadExcel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -80,6 +82,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ViewPager viewPager;
     private ProgressBar progressBar;
     private DbHelper db;
+
+    private DownloadExcel downloadExcel;
 
     private static final int showNextDayAfterSpecificHour = 20;
 
@@ -559,9 +563,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (itemId == R.id.summary) {
             Intent teacher = new Intent(MainActivity.this, SummaryActivity.class);
             startActivity(teacher);
-        } else if (itemId == R.id.buymeacoffee) {
+        } /*else if (itemId == R.id.buymeacoffee) {
             openUrlInChromeCustomTab("https://www.buymeacoffee.com/asdoi");
+        }*/
+
+        else if(itemId == R.id.print_time_table) {
+            //create and download excel sheet
+            Log.e("asd", "line 484");
+            downloadExcel = new DownloadExcel();
+            downloadExcel.createExcelWorkbook(this);
+            ChocoBar.builder().setActivity(this)
+                    .setText("Successfully downloaded in the Documents folder!!")
+                    .setDuration(ChocoBar.LENGTH_LONG)
+                    .green()
+                    .show();
         }
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
