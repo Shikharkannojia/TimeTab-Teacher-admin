@@ -19,13 +19,9 @@ import com.bpitindia.timetable.profiles.ProfileManagement;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-/**
- * Created by Ulan on 07.09.2018.
- */
-
 //TODO: Rewrite to Kotlin and RoomDB
 public class DbHelper extends SQLiteOpenHelper {
-    private Context context;
+    private final Context context;
 
     private static final int DB_VERSION = 7;
     private static final String DB_NAME = "timetabledb";
@@ -80,8 +76,9 @@ public class DbHelper extends SQLiteOpenHelper {
         super(context, getDBName(selectedProfile), null, DB_VERSION);
         this.context = context;
     }
-
+//updated for odd week number
     private DbHelper(Context context, boolean odd) {
+
         super(context, DB_NAME + "_odd", null, 6);
         this.context = context;
     }
@@ -190,14 +187,17 @@ public class DbHelper extends SQLiteOpenHelper {
      * Methods for Week fragments
      **/
     private String getTimetableTable() {
+
         return getTimetableTable(Calendar.getInstance());
     }
 
     private String getTimetableTable(Calendar now) {
-        if (PreferenceUtil.isEvenWeek(context, now))
+
+      return TIMETABLE;
+       /* if (PreferenceUtil.isEvenWeek(context, now))
             return TIMETABLE;
         else
-            return TIMETABLE_ODD;
+            return TIMETABLE_ODD;*/
     }
 
     public void insertWeek(Week week) {
@@ -254,14 +254,14 @@ public class DbHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT * FROM ( SELECT * FROM " + dbName + " ORDER BY " + WEEK_FROM_TIME + " ) WHERE " + WEEK_FRAGMENT + " LIKE '" + fragment + "%'", null);
         while (cursor.moveToNext()) {
             week = new Week();
-            week.setId(cursor.getInt(cursor.getColumnIndex(WEEK_ID)));
-            week.setFragment(cursor.getString(cursor.getColumnIndex(WEEK_FRAGMENT)));
-            week.setSubject(cursor.getString(cursor.getColumnIndex(WEEK_SUBJECT)));
-            week.setTeacher(cursor.getString(cursor.getColumnIndex(WEEK_TEACHER)));
-            week.setRoom(cursor.getString(cursor.getColumnIndex(WEEK_ROOM)));
-            week.setFromTime(cursor.getString(cursor.getColumnIndex(WEEK_FROM_TIME)));
-            week.setToTime(cursor.getString(cursor.getColumnIndex(WEEK_TO_TIME)));
-            week.setColor(cursor.getInt(cursor.getColumnIndex(WEEK_COLOR)));
+            week.setId(cursor.getInt(cursor.getColumnIndexOrThrow(WEEK_ID)));
+            week.setFragment(cursor.getString(cursor.getColumnIndexOrThrow(WEEK_FRAGMENT)));
+            week.setSubject(cursor.getString(cursor.getColumnIndexOrThrow(WEEK_SUBJECT)));
+            week.setTeacher(cursor.getString(cursor.getColumnIndexOrThrow(WEEK_TEACHER)));
+            week.setRoom(cursor.getString(cursor.getColumnIndexOrThrow(WEEK_ROOM)));
+            week.setFromTime(cursor.getString(cursor.getColumnIndexOrThrow(WEEK_FROM_TIME)));
+            week.setToTime(cursor.getString(cursor.getColumnIndexOrThrow(WEEK_TO_TIME)));
+            week.setColor(cursor.getInt(cursor.getColumnIndexOrThrow(WEEK_COLOR)));
             weeklist.add(week);
         }
         return weeklist;
@@ -307,11 +307,11 @@ public class DbHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT * FROM " + HOMEWORKS + " ORDER BY datetime(" + HOMEWORKS_DATE + ") ASC", null);
         while (cursor.moveToNext()) {
             homework = new Homework();
-            homework.setId(cursor.getInt(cursor.getColumnIndex(HOMEWORKS_ID)));
-            homework.setSubject(cursor.getString(cursor.getColumnIndex(HOMEWORKS_SUBJECT)));
-            homework.setDescription(cursor.getString(cursor.getColumnIndex(HOMEWORKS_DESCRIPTION)));
-            homework.setDate(cursor.getString(cursor.getColumnIndex(HOMEWORKS_DATE)));
-            homework.setColor(cursor.getInt(cursor.getColumnIndex(HOMEWORKS_COLOR)));
+            homework.setId(cursor.getInt(cursor.getColumnIndexOrThrow(HOMEWORKS_ID)));
+            homework.setSubject(cursor.getString(cursor.getColumnIndexOrThrow(HOMEWORKS_SUBJECT)));
+            homework.setDescription(cursor.getString(cursor.getColumnIndexOrThrow(HOMEWORKS_DESCRIPTION)));
+            homework.setDate(cursor.getString(cursor.getColumnIndexOrThrow(HOMEWORKS_DATE)));
+            homework.setColor(cursor.getInt(cursor.getColumnIndexOrThrow(HOMEWORKS_COLOR)));
             homelist.add(homework);
         }
         cursor.close();
@@ -356,10 +356,10 @@ public class DbHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT * FROM " + NOTES, null);
         while (cursor.moveToNext()) {
             note = new Note();
-            note.setId(cursor.getInt(cursor.getColumnIndex(NOTES_ID)));
-            note.setTitle(cursor.getString(cursor.getColumnIndex(NOTES_TITLE)));
-            note.setText(cursor.getString(cursor.getColumnIndex(NOTES_TEXT)));
-            note.setColor(cursor.getInt(cursor.getColumnIndex(NOTES_COLOR)));
+            note.setId(cursor.getInt(cursor.getColumnIndexOrThrow(NOTES_ID)));
+            note.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(NOTES_TITLE)));
+            note.setText(cursor.getString(cursor.getColumnIndexOrThrow(NOTES_TEXT)));
+            note.setColor(cursor.getInt(cursor.getColumnIndexOrThrow(NOTES_COLOR)));
             notelist.add(note);
         }
         cursor.close();
@@ -408,12 +408,12 @@ public class DbHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT * FROM " + TEACHERS, null);
         while (cursor.moveToNext()) {
             teacher = new Teacher();
-            teacher.setId(cursor.getInt(cursor.getColumnIndex(TEACHERS_ID)));
-            teacher.setName(cursor.getString(cursor.getColumnIndex(TEACHERS_NAME)));
-            teacher.setPost(cursor.getString(cursor.getColumnIndex(TEACHERS_POST)));
-            teacher.setPhonenumber(cursor.getString(cursor.getColumnIndex(TEACHERS_PHONE_NUMBER)));
-            teacher.setEmail(cursor.getString(cursor.getColumnIndex(TEACHERS_EMAIL)));
-            teacher.setColor(cursor.getInt(cursor.getColumnIndex(TEACHERS_COLOR)));
+            teacher.setId(cursor.getInt(cursor.getColumnIndexOrThrow(TEACHERS_ID)));
+            teacher.setName(cursor.getString(cursor.getColumnIndexOrThrow(TEACHERS_NAME)));
+            teacher.setPost(cursor.getString(cursor.getColumnIndexOrThrow(TEACHERS_POST)));
+            teacher.setPhonenumber(cursor.getString(cursor.getColumnIndexOrThrow(TEACHERS_PHONE_NUMBER)));
+            teacher.setEmail(cursor.getString(cursor.getColumnIndexOrThrow(TEACHERS_EMAIL)));
+            teacher.setColor(cursor.getInt(cursor.getColumnIndexOrThrow(TEACHERS_COLOR)));
             teacherlist.add(teacher);
         }
         cursor.close();
@@ -464,13 +464,13 @@ public class DbHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT * FROM " + EXAMS, null);
         while (cursor.moveToNext()) {
             exam = new Exam();
-            exam.setId(cursor.getInt(cursor.getColumnIndex(EXAMS_ID)));
-            exam.setSubject(cursor.getString(cursor.getColumnIndex(EXAMS_SUBJECT)));
-            exam.setTeacher(cursor.getString(cursor.getColumnIndex(EXAMS_TEACHER)));
-            exam.setRoom(cursor.getString(cursor.getColumnIndex(EXAMS_ROOM)));
-            exam.setDate(cursor.getString(cursor.getColumnIndex(EXAMS_DATE)));
-            exam.setTime(cursor.getString(cursor.getColumnIndex(EXAMS_TIME)));
-            exam.setColor(cursor.getInt(cursor.getColumnIndex(EXAMS_COLOR)));
+            exam.setId(cursor.getInt(cursor.getColumnIndexOrThrow(EXAMS_ID)));
+            exam.setSubject(cursor.getString(cursor.getColumnIndexOrThrow(EXAMS_SUBJECT)));
+            exam.setTeacher(cursor.getString(cursor.getColumnIndexOrThrow(EXAMS_TEACHER)));
+            exam.setRoom(cursor.getString(cursor.getColumnIndexOrThrow(EXAMS_ROOM)));
+            exam.setDate(cursor.getString(cursor.getColumnIndexOrThrow(EXAMS_DATE)));
+            exam.setTime(cursor.getString(cursor.getColumnIndexOrThrow(EXAMS_TIME)));
+            exam.setColor(cursor.getInt(cursor.getColumnIndexOrThrow(EXAMS_COLOR)));
             examslist.add(exam);
         }
         cursor.close();

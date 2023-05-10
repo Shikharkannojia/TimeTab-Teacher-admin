@@ -107,8 +107,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .show();
         }
 
-
-        initAll();
+        getFirebase();
+       // initAll();
 
         FloatingActionButton doneButton = findViewById(R.id.update);
         doneButton.setOnClickListener(new View.OnClickListener() {
@@ -133,6 +133,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 dialog.show();
             }
         });
+
     }
 
     private void getFirebase() {
@@ -151,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         db = new DbHelper(this);
         db.deleteAll();
 
-        DatabaseReference myRef1 = database.getReference("App").child("TimeTable").child(day);
+        DatabaseReference myRef1 = database.getReference("App").child("TimeTable").child("Student").child("CSE").child("Y3").child("A").child("G1").child(day);
         myRef1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -162,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 for (int i = 1; i <= size1; i++) {
                     String str = "P" + i;
 
-                    myRef.child("TimeTable").child(day).child(str).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                    myRef.child("TimeTable").child("Student").child("CSE").child("Y3").child("A").child("G1").child(day).child(str).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                         @Override
                         public void onSuccess(DataSnapshot dataSnapshot) {
                             String name = Objects.requireNonNull(dataSnapshot.child("Subject").getValue()).toString();
@@ -183,13 +184,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             db.insertWeek(w1);
                             list.add(w1);
                             //progressBar.setProgress(75);
-                            // progressBar.setVisibility(View.GONE);
                             initAll();
+                             progressBar.setVisibility(View.GONE);
+                            //initAll();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             // Handle any errors that may occur
+
                         }
                     });
                 }
@@ -299,8 +302,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onStart();
         progressBar.setVisibility(View.VISIBLE);
         DoNotDisturbReceiversKt.setDoNotDisturbReceivers(this, false);
-        getFirebase();
-      //  initAll();
+       // getFirebase();
+       initAll();
     }
 
     private void initAll() {
@@ -334,7 +337,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         setupFragments();
         setupCustomDialog();
-        progressBar.setVisibility(View.GONE);
+       // progressBar.setVisibility(View.GONE);
     }
 
     private boolean dontfire = true;
