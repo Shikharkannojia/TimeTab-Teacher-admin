@@ -82,10 +82,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ViewPager viewPager;
     private ProgressBar progressBar;
     private DbHelper db;
-
     private DownloadExcel downloadExcel;
-
     private static final int showNextDayAfterSpecificHour = 20;
+    private String year = "First Year";
+    private String branch = "CSE A";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         getFirebase();
+        getYearAndBranch();
        // initAll();
 
         FloatingActionButton doneButton = findViewById(R.id.update);
@@ -136,164 +137,163 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    private void getFirebase() {
-        db = new DbHelper(this);
-        loadDay("Monday");
-        loadDay("Tuesday");
-        loadDay("Wednesday");
-        loadDay("Thursday");
-        loadDay("Friday");
+    private boolean initialSelection1 = true;
+    private boolean initialSelection2 = true;
+    private void getYearAndBranch() {
+
+        Spinner yearSpinner = findViewById(R.id.yearSpinner);
+        Spinner branchSpinner = findViewById(R.id.branchSpinner);
+
+        String[] yearItems = {"First Year", "Second Year", "Third Year", "Fourth Year"};
+        String[] branchItems = {"CSE A", "CSE B", "EEE A", "EEE B"};
+
+        ArrayAdapter<String> yearAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, yearItems);
+        yearAdapter.setDropDownViewResource(R.layout.spinner_item);
+        yearSpinner.setAdapter(yearAdapter);
+
+        ArrayAdapter<String> branchAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, branchItems);
+        branchAdapter.setDropDownViewResource(R.layout.spinner_item);
+        branchSpinner.setAdapter(branchAdapter);
+
+        yearSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedYear = yearItems[position];
+                year = selectedYear;
+                if (!initialSelection1) {
+                    db.deleteAll();
+                    getFirebase();
+                } else {
+                    initialSelection1 = false;
+                }
+//                Toast.makeText(MainActivity.this, "Selected year: " + selectedYear, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        branchSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedBranch = branchItems[position];
+                branch = selectedBranch;
+                if (!initialSelection2) {
+                    db.deleteAll();
+                    getFirebase();
+                } else {
+                    initialSelection2 = false;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
     }
 
-    public void loadDay(String day){
-        ArrayList<Week> list = new ArrayList<>();
+
+    private void getFirebase() {
+        loadDay("Monday", year, branch);
+        loadDay("Tuesday", year, branch);
+        loadDay("Wednesday", year, branch);
+        loadDay("Thursday", year, branch);
+        loadDay("Friday", year, branch);
+    }
+
+    public void loadDay(String day, String year, String branch){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("App");
         db = new DbHelper(this);
         db.deleteAll();
 
-        DatabaseReference myRef1 = database.getReference("App").child("TimeTable").child("Student").child("CSE").child("Y3").child("A").child("G1").child(day);
+        DatabaseReference myRef1 = myRef.child("TimeTable").child("Student").child(branch).child(year).child(day);
         myRef1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                // Get the final size of the list
-                int size1 = (int) snapshot.getChildrenCount();
-                // Do something with the final size
-                // ...
-                for (int i = 1; i <= size1; i++) {
-                    String str = "P" + i;
+                if (snapshot.exists()) {
+                    int size1 = (int) snapshot.getChildrenCount();
+                    for (int i = 1; i <= size1; i++) {
+                        String str = "P" + i;
 
-                    myRef.child("TimeTable").child("Student").child("CSE").child("Y3").child("A").child("G1").child(day).child(str).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
-                        @Override
-                        public void onSuccess(DataSnapshot dataSnapshot) {
-                            String name = Objects.requireNonNull(dataSnapshot.child("Subject").getValue()).toString();
-                            String room = Objects.requireNonNull(dataSnapshot.child("Room").getValue()).toString();
-                            String teacher = Objects.requireNonNull(dataSnapshot.child("Teacher").getValue()).toString();
-                            String time = Objects.requireNonNull(dataSnapshot.child("Time").getValue()).toString();
-                            int color = Integer.parseInt(Objects.requireNonNull(dataSnapshot.child("Color").getValue()).toString());
-                            String time1 = "";
-                            String time2 = "";
-                            ///progressBar.setProgress(50);
-                            if (time != null && !time.equals("null")) {
-                                time1 = time.substring(0, 5);
-                                time2 = time.substring(8, time.length());
+                        myRef.child("TimeTable").child("Student").child(branch).child(year).child(day).child(str).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                            @Override
+                            public void onSuccess(DataSnapshot dataSnapshot) {
+                                String name = Objects.requireNonNull(dataSnapshot.child("Subject").getValue()).toString();
+                                String room = Objects.requireNonNull(dataSnapshot.child("Room").getValue()).toString();
+                                String teacher = Objects.requireNonNull(dataSnapshot.child("Teacher").getValue()).toString();
+                                String time = Objects.requireNonNull(dataSnapshot.child("Time").getValue()).toString();
+                                int color = Integer.parseInt(Objects.requireNonNull(dataSnapshot.child("Color").getValue()).toString());
+                                String time1 = "";
+                                String time2 = "";
+                                ///progressBar.setProgress(50);
+                                if (time != null && !time.equals("null")) {
+                                    time1 = time.substring(0, 5);
+                                    time2 = time.substring(8, time.length());
+                                }
+
+                                Week w1 = new Week(name, teacher, room, time1, time2, color);
+                                w1.setFragment(day);
+                                db.insertWeek(w1);
+                                initAll();
+                                progressBar.setVisibility(View.GONE);
                             }
-
-                            Week w1 = new Week(name, teacher, room, time1, time2, color);
-                            w1.setFragment(day);
-                            db.insertWeek(w1);
-                            list.add(w1);
-                            //progressBar.setProgress(75);
-                            initAll();
-                             progressBar.setVisibility(View.GONE);
-                            //initAll();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            // Handle any errors that may occur
-
-                        }
-                    });
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // Handle any errors that may occur
+                                initAll();
+                            }
+                        });
+                    }
+                } else {
+                    initAll();
                 }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // Handle any errors that may occur
+                initAll();
             }
         });
     }
 
 
 
-
     public void putOnFirebase(){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("App").child("Student").child(branch).child(year);
+        myRef.removeValue();
+
+        addDay("Monday", year, branch);
+        addDay("Tuesday", year, branch);
+        addDay("Wednesday", year, branch);
+        addDay("Thursday", year, branch);
+        addDay("Friday", year, branch);
+    }
+
+    public void addDay(String day, String year, String branch){
         db = new DbHelper(this);
-        ArrayList<Week> monday = db.getWeek("Monday");
-        ArrayList<Week> tuesday = db.getWeek("Tuesday");
-        ArrayList<Week> wednesday = db.getWeek("Wednesday");
-        ArrayList<Week> thursday = db.getWeek("Thursday");
-        ArrayList<Week> friday = db.getWeek("Friday");
+        ArrayList<Week> dayList = db.getWeek(day);
 
         // Write a message to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("App");
-        myRef.removeValue();
 
-
-        for(int i = 0; i < monday.size(); i++){
+        for(int i = 0; i < dayList.size(); i++){
             String str = "P"+(i+1);
-            DatabaseReference m = myRef.child("TimeTable").child("Monday").child(str);
-            String teacher = monday.get(i).getTeacher();
-            String subject = monday.get(i).getSubject();
-            String room = monday.get(i).getRoom();
-            String time = monday.get(i).getFromTime() + " - " + monday.get(i).getToTime();
+            DatabaseReference m = myRef.child("TimeTable").child("Student").child(branch).child(year).child(day).child(str);
+            String teacher = dayList.get(i).getTeacher();
+            String subject = dayList.get(i).getSubject();
+            String room = dayList.get(i).getRoom();
+            String time = dayList.get(i).getFromTime() + " - " + dayList.get(i).getToTime();
 
             m.child("Teacher").setValue(teacher);
             m.child("Subject").setValue(subject);
             m.child("Room").setValue(room);
             m.child("Time").setValue(time);
-            m.child("Color").setValue(monday.get(i).getColor());
-        }
-
-        for(int i = 0; i < tuesday.size(); i++){
-            String str = "P"+(i+1);
-            DatabaseReference m = myRef.child("TimeTable").child("Tuesday").child(str);
-            String teacher = tuesday.get(i).getTeacher();
-            String subject = tuesday.get(i).getSubject();
-            String room = tuesday.get(i).getRoom();
-            String time = tuesday.get(i).getFromTime() + " - " + monday.get(i).getToTime();
-
-            m.child("Teacher").setValue(teacher);
-            m.child("Subject").setValue(subject);
-            m.child("Room").setValue(room);
-            m.child("Time").setValue(time);
-            m.child("Color").setValue(tuesday.get(i).getColor());
-        }
-
-        for(int i = 0; i < wednesday.size(); i++){
-            String str = "P"+(i+1);
-            DatabaseReference m = myRef.child("TimeTable").child("Wednesday").child(str);
-            String teacher = wednesday.get(i).getTeacher();
-            String subject = wednesday.get(i).getSubject();
-            String room = wednesday.get(i).getRoom();
-            String time = wednesday.get(i).getFromTime() + " - " + wednesday.get(i).getToTime();
-
-            m.child("Teacher").setValue(teacher);
-            m.child("Subject").setValue(subject);
-            m.child("Room").setValue(room);
-            m.child("Time").setValue(time);
-            m.child("Color").setValue(wednesday.get(i).getColor());
-        }
-
-        for(int i = 0; i < thursday.size(); i++){
-            String str = "P"+(i+1);
-            DatabaseReference m = myRef.child("TimeTable").child("Thursday").child(str);
-            String teacher = thursday.get(i).getTeacher();
-            String subject = thursday.get(i).getSubject();
-            String room = thursday.get(i).getRoom();
-            String time = thursday.get(i).getFromTime() + " - " + thursday.get(i).getToTime();
-
-            m.child("Teacher").setValue(teacher);
-            m.child("Subject").setValue(subject);
-            m.child("Room").setValue(room);
-            m.child("Time").setValue(time);
-            m.child("Color").setValue(thursday.get(i).getColor());
-        }
-
-        for(int i = 0; i < friday.size(); i++){
-            String str = "P"+(i+1);
-            DatabaseReference m = myRef.child("TimeTable").child("Friday").child(str);
-            String teacher = friday.get(i).getTeacher();
-            String subject = friday.get(i).getSubject();
-            String room = friday.get(i).getRoom();
-            String time = friday.get(i).getFromTime() + " - " + friday.get(i).getToTime();
-
-            m.child("Teacher").setValue(teacher);
-            m.child("Subject").setValue(subject);
-            m.child("Room").setValue(room);
-            m.child("Time").setValue(time);
-            m.child("Color").setValue(friday.get(i).getColor());
+            m.child("Color").setValue(dayList.get(i).getColor());
         }
     }
 
