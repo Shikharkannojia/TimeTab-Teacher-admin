@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DbHelper db;
     private DownloadExcel downloadExcel;
     private static final int showNextDayAfterSpecificHour = 20;
-    private String year = "First Year";
+    private String semester = "First Semester";
     private String branch = "CSE A";
 
     @Override
@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         SharedPreferences sharedPreferences = getSharedPreferences("class", Context.MODE_PRIVATE);
-        year = sharedPreferences.getString("year", year);
+        semester = sharedPreferences.getString("semester", semester);
         branch = sharedPreferences.getString("branch",branch);
 
         getFirebase();
@@ -147,17 +147,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void getYearAndBranch() {
         SharedPreferences sharedPreferences = getSharedPreferences("class", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("year", year);
+        editor.putString("semester", semester);
         editor.putString("branch", branch);
         editor.apply();
 
         Spinner yearSpinner = findViewById(R.id.yearSpinner);
         Spinner branchSpinner = findViewById(R.id.branchSpinner);
 
-        String[] yearItems = {"First Year", "Second Year", "Third Year", "Fourth Year"};
+        String[] semesterItems = {"First Semester", "Second Semester", "Third Semester", "Fourth Semester", "Fifth Semester", "Sixth Semester", "Seventh Semester", "Eighth Semester"};
         String[] branchItems = {"CSE A", "CSE B", "EEE A", "EEE B"};
 
-        ArrayAdapter<String> yearAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, yearItems);
+        ArrayAdapter<String> yearAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, semesterItems);
         yearAdapter.setDropDownViewResource(R.layout.spinner_item);
         yearSpinner.setAdapter(yearAdapter);
 
@@ -165,19 +165,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         branchAdapter.setDropDownViewResource(R.layout.spinner_item);
         branchSpinner.setAdapter(branchAdapter);
 
-        String itemToSelectYear = year;
+        String itemToSelectYear = semester;
         int positionToSelectYear = yearAdapter.getPosition(itemToSelectYear);
         yearSpinner.setSelection(positionToSelectYear);
 
         String itemToSelectBranch = branch;
         int positionToSelectBranch = branchAdapter.getPosition(itemToSelectBranch);
         branchSpinner.setSelection(positionToSelectBranch);
+
         yearSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedYear = yearItems[position];
-                year = selectedYear;
-                editor.putString("year", year);
+                String selectedYear = semesterItems[position];
+                semester = selectedYear;
+                editor.putString("semester", semester);
                 editor.putString("branch", branch);
                 editor.apply();
                 if (!initialSelection1) {
@@ -199,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedBranch = branchItems[position];
                 branch = selectedBranch;
-                editor.putString("year", year);
+                editor.putString("semester", semester);
                 editor.putString("branch", branch);
                 editor.apply();
                 if (!initialSelection2) {
@@ -218,20 +219,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     private void getFirebase() {
-        loadDay("Monday", year, branch);
-        loadDay("Tuesday", year, branch);
-        loadDay("Wednesday", year, branch);
-        loadDay("Thursday", year, branch);
-        loadDay("Friday", year, branch);
+        loadDay("Monday", semester, branch);
+        loadDay("Tuesday", semester, branch);
+        loadDay("Wednesday", semester, branch);
+        loadDay("Thursday", semester, branch);
+        loadDay("Friday", semester, branch);
     }
 
-    public void loadDay(String day, String year, String branch){
+    public void loadDay(String day, String semester, String branch){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("App");
         db = new DbHelper(this);
         db.deleteAll();
 
-        DatabaseReference myRef1 = myRef.child("TimeTable").child("Student").child(branch).child(year).child(day);
+        DatabaseReference myRef1 = myRef.child("TimeTable").child("Student").child(branch).child(semester).child(day);
         myRef1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -240,7 +241,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     for (int i = 1; i <= size1; i++) {
                         String str = "P" + i;
 
-                        myRef.child("TimeTable").child("Student").child(branch).child(year).child(day).child(str).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                        myRef.child("TimeTable").child("Student").child(branch).child(semester).child(day).child(str).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                             @Override
                             public void onSuccess(DataSnapshot dataSnapshot) {
                                 String name = Objects.requireNonNull(dataSnapshot.child("Subject").getValue()).toString();
@@ -283,20 +284,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-
     public void putOnFirebase(){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("App").child("Student").child(branch).child(year);
+        DatabaseReference myRef = database.getReference("App").child("Student").child(branch).child(semester);
         myRef.removeValue();
 
-        addDay("Monday", year, branch);
-        addDay("Tuesday", year, branch);
-        addDay("Wednesday", year, branch);
-        addDay("Thursday", year, branch);
-        addDay("Friday", year, branch);
+        addDay("Monday", semester, branch);
+        addDay("Tuesday", semester, branch);
+        addDay("Wednesday", semester, branch);
+        addDay("Thursday", semester, branch);
+        addDay("Friday", semester, branch);
     }
 
-    public void addDay(String day, String year, String branch){
+    public void addDay(String day, String semester, String branch){
         db = new DbHelper(this);
         ArrayList<Week> dayList = db.getWeek(day);
 
@@ -306,7 +306,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         for(int i = 0; i < dayList.size(); i++){
             String str = "P"+(i+1);
-            DatabaseReference m = myRef.child("TimeTable").child("Student").child(branch).child(year).child(day).child(str);
+            DatabaseReference m = myRef.child("TimeTable").child("Student").child(branch).child(semester).child(day).child(str);
             String teacher = dayList.get(i).getTeacher();
             String subject = dayList.get(i).getSubject();
             String room = dayList.get(i).getRoom();
