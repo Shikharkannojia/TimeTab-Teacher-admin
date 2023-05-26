@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -107,6 +108,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .show();
         }
 
+        SharedPreferences sharedPreferences = getSharedPreferences("class", Context.MODE_PRIVATE);
+        year = sharedPreferences.getString("year", year);
+        branch = sharedPreferences.getString("branch",branch);
+
         getFirebase();
         getYearAndBranch();
        // initAll();
@@ -140,6 +145,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private boolean initialSelection1 = true;
     private boolean initialSelection2 = true;
     private void getYearAndBranch() {
+        SharedPreferences sharedPreferences = getSharedPreferences("class", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("year", year);
+        editor.putString("branch", branch);
+        editor.apply();
 
         Spinner yearSpinner = findViewById(R.id.yearSpinner);
         Spinner branchSpinner = findViewById(R.id.branchSpinner);
@@ -155,11 +165,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         branchAdapter.setDropDownViewResource(R.layout.spinner_item);
         branchSpinner.setAdapter(branchAdapter);
 
+        String itemToSelectYear = year;
+        int positionToSelectYear = yearAdapter.getPosition(itemToSelectYear);
+        yearSpinner.setSelection(positionToSelectYear);
+
+        String itemToSelectBranch = branch;
+        int positionToSelectBranch = branchAdapter.getPosition(itemToSelectBranch);
+        branchSpinner.setSelection(positionToSelectBranch);
         yearSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedYear = yearItems[position];
                 year = selectedYear;
+                editor.putString("year", year);
+                editor.putString("branch", branch);
+                editor.apply();
                 if (!initialSelection1) {
                     db.deleteAll();
                     getFirebase();
@@ -179,6 +199,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedBranch = branchItems[position];
                 branch = selectedBranch;
+                editor.putString("year", year);
+                editor.putString("branch", branch);
+                editor.apply();
                 if (!initialSelection2) {
                     db.deleteAll();
                     getFirebase();
