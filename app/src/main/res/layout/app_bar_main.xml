@@ -49,14 +49,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:prompt="@string/year_prompt" />
+                android:prompt="@string/year_prompt"
+                tools:listitem=""/>
 
             <Spinner
                 android:id="@+id/branchSpinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:prompt="@string/branch_prompt" />
+                android:prompt="@string/branch_prompt"
+               />
 
         </LinearLayout>
 

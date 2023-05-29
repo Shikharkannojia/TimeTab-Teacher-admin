@@ -8,14 +8,14 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:808813415062:android:53714c65cebeb0742e10b7",
+        "mobilesdk_app_id": "1:808813415062:android:487614670b30bd2b2e10b7",
         "android_client_info": {
-          "package_name": "com.asdoi.timetable"
+          "package_name": "com.bpitindia.myapplication"
         }
       },
       "oauth_client": [
         {
-          "client_id": "808813415062-8aim6f7tpr26hq8kmon3k9is5u6buqva.apps.googleusercontent.com",
+          "client_id": "808813415062-bat0as0m7g02dnjsds2nshmnrbr1blgl.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -37,14 +37,14 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:808813415062:android:487614670b30bd2b2e10b7",
+        "mobilesdk_app_id": "1:808813415062:android:5a371f9f85186fb42e10b7",
         "android_client_info": {
-          "package_name": "com.bpitindia.myapplication"
+          "package_name": "com.bpitindia.stimetable"
         }
       },
       "oauth_client": [
         {
-          "client_id": "808813415062-8aim6f7tpr26hq8kmon3k9is5u6buqva.apps.googleusercontent.com",
+          "client_id": "808813415062-bat0as0m7g02dnjsds2nshmnrbr1blgl.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -73,7 +73,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "808813415062-8aim6f7tpr26hq8kmon3k9is5u6buqva.apps.googleusercontent.com",
+          "client_id": "808813415062-bat0as0m7g02dnjsds2nshmnrbr1blgl.apps.googleusercontent.com",
           "client_type": 3
         }
       ],

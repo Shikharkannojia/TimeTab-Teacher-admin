@@ -13,6 +13,7 @@ public class Week {
     public Week() {}
 
     public Week(String subject, String teacher, String room, String fromtime, String totime, int color) {
+
         this.subject = subject;
         this.teacher = teacher;
         this.room = room;

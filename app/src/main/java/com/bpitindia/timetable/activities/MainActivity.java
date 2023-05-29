@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -48,7 +49,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.pd.chocobar.ChocoBar;
 import com.bpitindia.timetable.adapters.FragmentsTabAdapter;
 import com.bpitindia.timetable.fragments.WeekdayFragment;
@@ -107,8 +107,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .show();
         }
 
-        getFirebase();
+
         getYearAndBranch();
+        getFirebase();
        // initAll();
 
         FloatingActionButton doneButton = findViewById(R.id.update);
@@ -139,21 +140,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private boolean initialSelection1 = true;
     private boolean initialSelection2 = true;
+    private String getSemFromSpinner() {
+        Spinner semSpinner = findViewById(R.id.yearSpinner);
+        String sem = semSpinner.getSelectedItem().toString();
+        return sem;
+    }
+    private String getBranchFromSpinner() {
+        Spinner branchSpinner = findViewById(R.id.branchSpinner);
+        String branch = branchSpinner.getSelectedItem().toString();
+        return branch;
+    }
+
     private void getYearAndBranch() {
 
         Spinner yearSpinner = findViewById(R.id.yearSpinner);
         Spinner branchSpinner = findViewById(R.id.branchSpinner);
 
-        String[] yearItems = {"First Year", "Second Year", "Third Year", "Fourth Year"};
-        String[] branchItems = {"CSE A", "CSE B", "EEE A", "EEE B"};
+        String[] yearItems =  {"First Sem", "Second Sem", "Third Sem", "Fourth Sem", "Fifth Sem", "Sixth Sem", "Seventh Sem", "Eighth Sem"};
+        String[] branchItems ={"CSE A", "CSE B","CSE C", "CSE AI & DS","IT A", "IT B", "ECE A", "ECE B", "EEE A", "EEE B"};
 
-        ArrayAdapter<String> yearAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, yearItems);
+        ArrayAdapter yearAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, yearItems);
         yearAdapter.setDropDownViewResource(R.layout.spinner_item);
         yearSpinner.setAdapter(yearAdapter);
 
         ArrayAdapter<String> branchAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, branchItems);
         branchAdapter.setDropDownViewResource(R.layout.spinner_item);
         branchSpinner.setAdapter(branchAdapter);
+
 
         yearSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -195,6 +208,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     private void getFirebase() {
+        String branch =getBranchFromSpinner();
+        //String year = "First Year";
+        String year = getSemFromSpinner();
         loadDay("Monday", year, branch);
         loadDay("Tuesday", year, branch);
         loadDay("Wednesday", year, branch);
@@ -224,6 +240,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 String room = Objects.requireNonNull(dataSnapshot.child("Room").getValue()).toString();
                                 String teacher = Objects.requireNonNull(dataSnapshot.child("Teacher").getValue()).toString();
                                 String time = Objects.requireNonNull(dataSnapshot.child("Time").getValue()).toString();
+                               // String time = Objects.requireNonNull(dataSnapshot.child("P"+ i).getValue()).toString();
                                 int color = Integer.parseInt(Objects.requireNonNull(dataSnapshot.child("Color").getValue()).toString());
                                 String time1 = "";
                                 String time2 = "";
@@ -262,10 +279,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     public void putOnFirebase(){
+        String branch =getBranchFromSpinner();
+        String year = getSemFromSpinner();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("App").child("Student").child(branch).child(year);
         myRef.removeValue();
-
         addDay("Monday", year, branch);
         addDay("Tuesday", year, branch);
         addDay("Wednesday", year, branch);
@@ -283,6 +301,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         for(int i = 0; i < dayList.size(); i++){
             String str = "P"+(i+1);
+
             DatabaseReference m = myRef.child("TimeTable").child("Student").child(branch).child(year).child(day).child(str);
             String teacher = dayList.get(i).getTeacher();
             String subject = dayList.get(i).getSubject();
@@ -548,7 +567,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(settings);
             finish();
         } else if (itemId == R.id.schoolwebsitemenu) {
-            String schoolWebsite = "https://www.bpitindia.com/";
+            String schoolWebsite = "https://bpitindia.ac.in/";
             /* PreferenceManager.getDefaultSharedPreferences(this).getString(SettingsActivity.KEY_SCHOOL_WEBSITE_SETTING, null);*/
 
             if (!TextUtils.isEmpty(schoolWebsite)) {

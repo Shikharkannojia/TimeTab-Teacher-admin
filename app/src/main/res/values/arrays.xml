@@ -1,20 +1,4 @@
-<!--
-  ~ Copyright (c) 2020 Felix Hollederer
-  ~     This file is part of GymWenApp.
-  ~
-  ~     GymWenApp is free software: you can redistribute it and/or modify
-  ~     it under the terms of the GNU General Public License as published by
-  ~     the Free Software Foundation, either version 3 of the License, or
-  ~     (at your option) any later version.
-  ~
-  ~     GymWenApp is distributed in the hope that it will be useful,
-  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ~     GNU General Public License for more details.
-  ~
-  ~     You should have received a copy of the GNU General Public License
-  ~     along with GymWenApp.  If not, see <https://www.gnu.org/licenses/>.
-  -->
+
 
 <resources>
     <!-- Reply Preference -->
@@ -25,6 +9,26 @@
         <item>@string/theme_auto</item>
     </string-array>
 
+<!--    <string_array name="year_array">
+        <item>Ist Year</item>
+        <item>IInd Year</item>
+        <item>IIIrd Year</item>
+        <item>IVth Year</item>
+    </string_array>-->
+
+<!--    <string-array name="branch_array">
+        <item>CSE A</item>
+        <item>CSE B</item>
+        <item>CSE C</item>
+        <item>CSE AI DS</item>
+        <item>ECE A</item>
+        <item>ECE B</item>
+        <item>IT A</item>
+        <item>IT B</item>
+        <item>EEE A</item>
+        <item>EEE B</item>
+
+    </string-array>-->
     <string-array name="theme_array_values">
         <item>light</item>
         <item>dark</item>
@@ -67,5 +71,6 @@
         <item>Spanish</item>
         <item>Sport</item>
     </string-array>
+
 
 </resources>
