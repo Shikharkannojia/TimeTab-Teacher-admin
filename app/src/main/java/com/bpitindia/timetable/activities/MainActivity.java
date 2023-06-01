@@ -140,11 +140,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private boolean initialSelection1 = true;
     private boolean initialSelection2 = true;
+    @NonNull
     private String getSemFromSpinner() {
         Spinner semSpinner = findViewById(R.id.yearSpinner);
         String sem = semSpinner.getSelectedItem().toString();
         return sem;
     }
+    @NonNull
     private String getBranchFromSpinner() {
         Spinner branchSpinner = findViewById(R.id.branchSpinner);
         String branch = branchSpinner.getSelectedItem().toString();
