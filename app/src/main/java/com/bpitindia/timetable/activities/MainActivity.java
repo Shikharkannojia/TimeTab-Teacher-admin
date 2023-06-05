@@ -39,6 +39,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.ajts.androidmads.library.ExcelToSQLite;
 import com.ajts.androidmads.library.SQLiteToExcel;
 import com.bpitindia.timetable.model.DownloadExcel;
+import com.bpitindia.timetable.utils.RootChecker;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -64,6 +65,7 @@ import com.bpitindia.timetable.utils.ShortcutUtils;
 import com.bpitindia.timetable.R;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -110,7 +112,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         getYearAndBranch();
         getFirebase();
-       // initAll();
+       // initAll();'
+
+        boolean isRooted = RootChecker.isDeviceRooted();
+                // Check if the device is rooted
+        if (isRooted) {
+            // Close the app
+            finish();
+        }
+
 
         FloatingActionButton doneButton = findViewById(R.id.update);
         doneButton.setOnClickListener(new View.OnClickListener() {
