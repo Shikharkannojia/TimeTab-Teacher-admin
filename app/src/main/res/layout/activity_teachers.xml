@@ -17,10 +17,9 @@
             android:id="@+id/teacherlist"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:listSelector="@android:color/transparent"
             android:cacheColorHint="@android:color/transparent"
             android:divider="@null"
-            />
+            android:listSelector="@android:color/transparent" />
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -30,5 +29,16 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/ic_add_black_24dp" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/updateteacher"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="80dp"
+        android:layout_marginRight="16dp"
+        app:maxImageSize="40dp"
+        app:srcCompat="@drawable/baseline_done_24"
+        tools:layout_editor_absoluteX="339dp"
+        tools:layout_editor_absoluteY="546dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,7 +1,10 @@
 package com.bpitindia.timetable.adapters;
 
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.net.Uri;
@@ -16,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -130,9 +134,25 @@ public class TeachersAdapter extends ArrayAdapter<Teacher> {
         if (phonenumber != null && !phonenumber.trim().isEmpty()) {
             holder.phonenumber.setBackgroundResource(outValue.resourceId);
             holder.phonenumber.setOnClickListener((View v) -> {
-                Intent intent = new Intent(Intent.ACTION_DIAL);
+               /* Intent intent = new Intent(Intent.ACTION_DIAL);
                 intent.setData(Uri.parse("tel:" + phonenumber));
-                mActivity.startActivity(intent);
+                mActivity.startActivity(intent);*/
+
+               boolean installed = appInstalledOrNot();
+                if (installed) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    String message = "Hi, I am a student of BPIT.";
+                    intent.setData(Uri.parse("http://api.whatsapp.com/send?phone=" + "+91" + phonenumber + "&text=" + message));
+                    mActivity.startActivity(intent);
+
+                } else {
+                    Toast.makeText(this.getContext(), "Whats app not installed on your device", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.parse("tel:" +"+91"+ phonenumber));
+                    mActivity.startActivity(intent);
+
+                }
+
             });
         }
 
@@ -187,6 +207,21 @@ public class TeachersAdapter extends ArrayAdapter<Teacher> {
         hidePopUpMenu(holder);
 
         return convertView;
+    }
+    private boolean appInstalledOrNot(){
+        Context context = mActivity.getApplicationContext();
+
+// Get the PackageManager object.
+        PackageManager packageManager = context.getPackageManager();
+        // PackageManager packageManager = mActivity.getPackageManager();
+        boolean app_installed=false;
+        try {
+            PackageInfo packageInfo = packageManager.getPackageInfo("com.whatsapp", 0);
+            app_installed = packageInfo != null;
+        }catch (PackageManager.NameNotFoundException e){
+            app_installed = false;
+        }
+        return app_installed;
     }
 
     @NonNull

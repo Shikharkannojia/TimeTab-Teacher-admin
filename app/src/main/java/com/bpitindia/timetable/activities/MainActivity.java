@@ -137,6 +137,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initAll();
+    }
+
 
     private boolean initialSelection1 = true;
     private boolean initialSelection2 = true;
@@ -744,6 +750,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .neutralText(R.string.backup)
                 .show();
     }
+
 
     private void openUrlInChromeCustomTab(String url) {
         Context context = this;
